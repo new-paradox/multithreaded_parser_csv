@@ -11,7 +11,7 @@ directory path and numbers_files - one thread reads as many files
 csv format files for example:
 https://yadi.sk/d/UZx3AN9lQCSh0g?w=1
 
-Use:~/multithreaded-csv-parser$ python3 run_script.py -p example-trades -f 20
+Use:~/multithreaded_parser_csv$ python3 run_script.py -p example-trades -f 20
 
 Result to terminal:
 Максимальная волатильность:
