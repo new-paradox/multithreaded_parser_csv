@@ -8,6 +8,9 @@ directory path and numbers_files - one thread reads as many files
 Для запуска надо передать 2 аргумента:
 Путь к каталогу и numbers_files - столько файлов принимает 1 поток
 
+csv format files for example:
+https://yadi.sk/d/UZx3AN9lQCSh0g?w=1
+
 Use:~/multithreaded-csv-parser$ python3 run_script.py -p example-trades -f 20
 
 Result to terminal:
