@@ -60,13 +60,13 @@ class Parser(Thread):
     отдает имя бумаг и их волатильность
     """
 
-    def __init__(self, group_file, *args, **kwargs):
+    def __init__(self, group_file, zero_volatility, all_stat, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.group_file = group_file
-        self.volatility_stat = {}
-        self.zero_stat = {}
+        self.volatility_stat = all_stat
+        self.zero_stat = zero_volatility
 
-    def csv_reader(self):
+    def run(self):
         """
         Read a csv file
         Generates group statistics
@@ -81,11 +81,11 @@ class Parser(Thread):
         for file_path in self.group_file:
             with open(file_path, "r") as f_obj:
                 reader = csv.reader(f_obj)
-                name = f_obj.name[15:-4]
+                name = f_obj.name[7:-4]
                 stat = []
-                for index_row, row in enumerate(reader):
-                    if index_row:
-                        stat.append(float(row[2]))
+                next(reader)
+                for row in reader:
+                    stat.append(float(row[2]))
                 stat = self.calculate_the_volatility(stat)
                 if stat:
                     self.volatility_stat[name] = round(stat, 2)
@@ -144,16 +144,12 @@ class ParsersRunner:
         запускает потоки
         запускает форматированный вывод show_statistics()
         """
-        path_group = [Parser(group_file=path) for path in
+        path_group = [Parser(group_file=path, zero_volatility=self.zero_volatility, all_stat=self.all_stat) for path in
                       FileManager(src=self.src, numbers_files=self.numbers_files).get_group_of_files()]
         for parser in path_group:
             parser.start()
         for parser in path_group:
             parser.join()
-        for parser in path_group:
-            all_stat_in, zero_volatility_in = parser.csv_reader()
-            self.all_stat, self.zero_volatility = {**all_stat_in, **self.all_stat}, \
-                                                  {**zero_volatility_in, **self.zero_volatility}
 
         self.show_statistics()
 
