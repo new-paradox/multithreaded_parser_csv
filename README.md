@@ -2,16 +2,16 @@
 
 The script parses the directory with csv files in multithreaded mode.
 To run you need to pass 2 arguments:
-directory path and numbers_files - one thread reads as many files
+directory path and numbers_thread - number of threads
 
 Скрипт парсит каталог с csv файлами в многопоточном режиме
 Для запуска требуется передать 2 аргумента:
-Путь к каталогу и numbers_files - столько файлов принимает 1 поток
+Путь к каталогу и numbers_thread - число потоков
 
 csv format files for example:
 https://yadi.sk/d/UZx3AN9lQCSh0g?w=1
 
-Use:~/multithreaded_parser_csv$ python3 run_script.py -p example-trades -f 20
+Use:~/multithreaded_parser_csv$ python3 run_script.py -p example-trades -f 4
 
 Result to terminal:
 Максимальная волатильность:

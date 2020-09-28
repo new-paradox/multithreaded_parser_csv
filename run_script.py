@@ -9,6 +9,6 @@ if __name__ == '__main__':
         parser.add_argument('-p', '--path', type=str, metavar='', help='directory path')
         parser.add_argument('-f', '--file', type=int, metavar='', help='files in the one thread')
         args = parser.parse_args()
-        ParsersRunner(src=args.path, numbers_files=args.file).run()
+        ParsersRunner(src=args.path, numbers_thread=args.file).run()
     except FileNotFoundError as exc:
         print(f"Error: {exc} type {(type(exc))}")

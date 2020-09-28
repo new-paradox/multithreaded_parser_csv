@@ -15,9 +15,9 @@ class FileManager:
     Отдает пути к файлам в виде списка списков от числа потоков
     """
 
-    def __init__(self, src, numbers_files):
+    def __init__(self, src, numbers_thread):
         self.src = os.path.normpath(src)
-        self.numbers_files = numbers_files
+        self.numbers_thread = numbers_thread
 
     def get_group_of_files(self):
         """
@@ -45,8 +45,11 @@ class FileManager:
         .
         делит список файлов на равные части и остаток
         """
-        for i in range(0, len(files_path), self.numbers_files):
-            yield files_path[i:i + self.numbers_files]
+        if self.numbers_thread > len(files_path):
+            self.numbers_thread = len(files_path)
+        else:
+            for i in range(0, len(files_path), self.numbers_thread):
+                yield files_path[i:i + self.numbers_thread]
 
 
 class Parser(Thread):
@@ -116,22 +119,22 @@ class ParsersRunner:
     """
     Runs parsers based on a list of filegroups
     The number of items in the list of filegroups depends on
-    of the passed number numbers_files - one thread reads as many files
+    of the passed number numbers_thread - number of threads
     collects general statistics
     makes formatted output to the console
     .
     запускает парсеры на основании списка групп файлов
     Количество элементов в списке групп файлов зависит от
-    переданного числа numbers_files - столько файлов читает один поток
+    переданного числа numbers_thread - числа потоков
     собирает общую статистику
     делает форматированный вывод на консоль
     """
 
-    def __init__(self, src, numbers_files):
+    def __init__(self, src, numbers_thread):
         self.src = src
         self.all_stat = {}
         self.zero_volatility = {}
-        self.numbers_files = numbers_files
+        self.numbers_thread = numbers_thread
 
     @time_track
     def run(self):
@@ -145,7 +148,7 @@ class ParsersRunner:
         запускает форматированный вывод show_statistics()
         """
         path_group = [Parser(group_file=path, zero_volatility=self.zero_volatility, all_stat=self.all_stat) for path in
-                      FileManager(src=self.src, numbers_files=self.numbers_files).get_group_of_files()]
+                      FileManager(src=self.src, numbers_thread=self.numbers_thread).get_group_of_files()]
         for parser in path_group:
             parser.start()
         for parser in path_group:
