@@ -47,9 +47,9 @@ class FileManager:
         """
         if self.numbers_thread > len(files_path):
             self.numbers_thread = len(files_path)
-        else:
-            for i in range(0, len(files_path), self.numbers_thread):
-                yield files_path[i:i + self.numbers_thread]
+       
+        for i in range(0, len(files_path), self.numbers_thread):
+            yield files_path[i:i + self.numbers_thread]
 
 
 class Parser(Thread):
