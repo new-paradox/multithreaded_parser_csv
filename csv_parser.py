@@ -48,8 +48,9 @@ class FileManager:
         if self.numbers_thread > len(files_path):
             self.numbers_thread = len(files_path)
        
-        for i in range(0, len(files_path), self.numbers_thread):
-            yield files_path[i:i + self.numbers_thread]
+        group_number = ceil(len(files_path) / self.numbers_process)
+        for i in range(0, len(files_path), group_number):
+            yield files_path[i:i + group_number]
 
 
 class Parser(Thread):
@@ -91,7 +92,7 @@ class Parser(Thread):
                     stat.append(float(row[2]))
                 stat = self.calculate_the_volatility(stat)
                 if stat:
-                    self.volatility_stat[name] = round(stat, 2)
+                    self.volatility_stat[name] = stat
                 else:
                     self.zero_stat[name] = f'{name}'
         return self.volatility_stat, self.zero_stat
@@ -168,9 +169,9 @@ class ParsersRunner:
         sort_stat = sorted(self.all_stat.items(), key=itemgetter(1), reverse=True)
         print('Максимальная волатильность:')
         for name, val in sort_stat[:-(len(sort_stat) - 3)]:
-            print(f'{name} - {val} %')
+            print(f'{name} - {round(val, 2)} %')
         print('Минимальная волатильность:')
         for name, val in sort_stat[(len(sort_stat) - 3):]:
-            print(f'{name} - {val} %')
+            print(f'{name} - {(val, 2)} %')
         print('Тикеры с нулевой волатильностью:')
         pprint(', '.join(self.zero_volatility))
