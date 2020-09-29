@@ -173,6 +173,6 @@ class ParsersRunner:
             print(f'{name} - {round(val, 2)} %')
         print('Минимальная волатильность:')
         for name, val in sort_stat[(len(sort_stat) - 3):]:
-            print(f'{name} - {(val, 2)} %')
+            print(f'{name} - {round(val, 2)} %')
         print('Тикеры с нулевой волатильностью:')
         pprint(', '.join(self.zero_volatility))
