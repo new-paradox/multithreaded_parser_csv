@@ -49,7 +49,7 @@ class FileManager:
         if self.numbers_thread > len(files_path):
             self.numbers_thread = len(files_path)
        
-        group_number = ceil(len(files_path) / self.numbers_process)
+        group_number = ceil(len(files_path) / self.numbers_thread)
         for i in range(0, len(files_path), group_number):
             yield files_path[i:i + group_number]
 
